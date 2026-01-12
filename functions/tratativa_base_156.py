@@ -66,7 +66,7 @@ def download_base(driver: Chrome, index: int):
 
 def acomplish_download(driver: Chrome, index: int, default_extension: str = '.crdownload'):
     downloads_path = os.path.join(os.path.expanduser("~"), 'Downloads')
-    old_files = validar_arquivos_pasta(downloads_path, '.sswweb')
+    old_files = validar_arquivos_pasta(downloads_path)
     download_base(driver, index)
     
     timeout = time.time() + 60
@@ -108,7 +108,7 @@ def open_page_156(driver: Chrome, options: str, date_time: datetime):
     index_base = validar_relatorio_156(df, option=options, date_time=date_time)
     
     if index_base:
-        file =acomplish_download(driver, index_base[0], default_extension='.sswweb')
+        file =acomplish_download(driver, index_base[0], default_extension='.crdownload')
         return file
     else:
         return False 
