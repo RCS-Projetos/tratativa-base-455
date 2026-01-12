@@ -3,7 +3,7 @@ from functions import make_login, driver
 from treatments import treat_455, treat_file_455
 
 
-driver_chr = driver(headless=True)
+driver_chr = driver()
 
 make_login(driver_chr)
 time.sleep(3)
