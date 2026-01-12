@@ -1,7 +1,8 @@
 import pandas as pd
 
 def treat_file_455(new_file: str):
-    df = pd.read_csv(new_file, sep=";", header=1,encoding="latin1")
+    print(new_file)
+    df = pd.read_csv(new_file, sep=';',header=1, dtype=str, encoding='latin-1')
 
     df[['PREFIXO', 'CTRC', 'DIGITO']] = df['Serie/Numero CTRC'].str.extract(r'([A-Z]+)(\d+)-(\d+)')
     df['DATA_HORA_EMISSAO'] = pd.to_datetime(
