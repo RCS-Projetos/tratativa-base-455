@@ -4,7 +4,6 @@ from pandas import DataFrame
 import json
 
 url_base = lambda x: f'http://127.0.0.1:8000/{x}'
-API_URL = 'http://127.0.0.1:8000/ingestion455/'
 BATCH_SIZE = 100
 headers = {
     "Content-Type": "application/json" # Remova se não usar auth
