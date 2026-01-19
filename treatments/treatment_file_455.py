@@ -146,8 +146,8 @@ def treat_file_455(new_file: str):
         df_new_registers = new_ctrcs(df_registers)
         df_old_registers = old_ctrcs(df_registers)
         
-        send_registers(df_new_registers, 'ingestion/455/', 'post')
-        send_registers(df_old_registers, 'ingestion/455/bulk-update/', 'patch')
+        send_registers(df_new_registers, '455/', 'post')
+        send_registers(df_old_registers, '455/bulk-update/', 'patch')
     
     
     # df_old_registers.to_excel('tratativa_455.xlsx', index=False)

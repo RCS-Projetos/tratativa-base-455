@@ -11,14 +11,14 @@ headers = {
 
 def searc_ctrcs_registers(ctrcs: list[str]) -> rq.Response:
     
-    url = url_base('ctrc/')
+    url = url_base('455/get-by-keys/')
     
     response = rq.post(
         url,
         json={             
             'keys': ctrcs
         },
-        timeout=10
+        timeout=300
     )
     
     return response
