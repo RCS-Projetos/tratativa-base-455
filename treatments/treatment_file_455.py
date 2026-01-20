@@ -9,10 +9,9 @@ def treat_file_455(new_file: str):
         sep=';',
         header=1, 
         dtype=str, 
-        encoding='latin-1',
-        nrows=20000
+        encoding='latin-1'
     )
-    
+   
     mapa_colunas = {
         'Serie/Numero CTRC': 'Key',
         'PREFIXO': 'Prefix',
@@ -128,7 +127,7 @@ def treat_file_455(new_file: str):
             ]
     
     df_tratado = df_tratado.replace({np.nan: None})
-    
+
     response = searc_ctrcs_registers(
             ctrcs_list(df_tratado)
         )
@@ -148,6 +147,7 @@ def treat_file_455(new_file: str):
         
         send_registers(df_new_registers, '455/', 'post')
         send_registers(df_old_registers, '455/bulk-update/', 'patch')
-    
+    else:
+        print(response.status_code)
     
     # df_old_registers.to_excel('tratativa_455.xlsx', index=False)

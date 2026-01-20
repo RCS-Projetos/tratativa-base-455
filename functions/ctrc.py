@@ -10,7 +10,7 @@ BASE_URL = os.getenv('BASE_URL')
 BATCH_SIZE = int(os.getenv('BATCH_SIZE'))
 TIMEOUT = int(os.getenv('TIMEOUT'))
 
-url_path = lambda x: f'{BASE_URL}/{x}'
+url_path = lambda x: f'{BASE_URL}{x}'
 
 headers = {
     "Content-Type": "application/json" # Remova se não usar auth
