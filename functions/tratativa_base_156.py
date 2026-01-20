@@ -95,7 +95,7 @@ def acomplish_download(driver: Chrome, index: int, default_extension: str = '.cr
     
     
 def open_page_156(driver: Chrome, options: str, date_time: datetime):
-    url = "https://sistema.ssw.inf.br/bin/ssw1440"
+    url = os.getenv('URL_156')
     
     if driver.current_url != url:
         driver.get(url) 

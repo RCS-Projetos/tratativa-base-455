@@ -1,26 +1,33 @@
+import os
 import requests as rq
 import pandas as pd
 from pandas import DataFrame
-import json
+from dotenv import load_dotenv
+load_dotenv()
 
-url_base = lambda x: f'http://127.0.0.1:8000/{x}'
-BATCH_SIZE = 100
+BASE_URL = os.getenv('BASE_URL')
+
+BATCH_SIZE = int(os.getenv('BATCH_SIZE'))
+TIMEOUT = int(os.getenv('TIMEOUT'))
+
+url_path = lambda x: f'{BASE_URL}/{x}'
+
 headers = {
     "Content-Type": "application/json" # Remova se não usar auth
 }
 
 def searc_ctrcs_registers(ctrcs: list[str]) -> rq.Response:
     
-    url = url_base('455/get-by-keys/')
+    url = url_path('455/get-by-keys/')
     
     response = rq.post(
         url,
         json={             
             'keys': ctrcs
         },
-        timeout=300
+        timeout=TIMEOUT
     )
-    
+  
     return response
 
 def ctrcs_list(df: DataFrame)-> list[str]:
@@ -146,9 +153,9 @@ def send_registers(df: pd.DataFrame, url: str, method: str):
         try:
             # Envia o POST
             if method == 'post':
-                response = rq.post(url_base(url), json=payload_list, headers=headers)
+                response = rq.post(url_path(url), json=payload_list, headers=headers)
             elif method == 'patch':
-                response = rq.patch(url_base(url), json=payload_list, headers=headers)
+                response = rq.patch(url_path(url), json=payload_list, headers=headers)
             else:
                 raise 'Nenhum metodo selecionado.' 
             
@@ -157,9 +164,7 @@ def send_registers(df: pd.DataFrame, url: str, method: str):
                 print(f"Lote {start_idx}-{end_idx} enviado com sucesso.")
             else:
                 print(f"Erro no lote {start_idx}-{end_idx}: {response.status_code}")
-                pd.DataFrame(batch_df).to_excel(f'logs/Lote {start_idx}-{end_idx} - Erro Importação.xlsx')
+                pd.DataFrame(payload_list).to_json(f'logs/Lote {start_idx}-{end_idx} - {response.status_code}.json', orient='records', lines=True)
                 print(response.text) # Mostra o erro retornado pelo Django para debug
-                # Opcional: Break aqui se quiser parar no primeiro erro
-                
         except Exception as e:
             print(f"Exceção crítica no lote {start_idx}-{end_idx}: {str(e)}") 

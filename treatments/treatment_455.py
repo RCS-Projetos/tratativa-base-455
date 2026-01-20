@@ -1,3 +1,4 @@
+import os
 import time
 from datetime import timedelta
 from datetime import datetime
@@ -6,8 +7,10 @@ from selenium.webdriver import Chrome
 from functions import open_page_156
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from dotenv import load_dotenv
+load_dotenv()
 
-url = "https://sistema.ssw.inf.br/bin/ssw0230"
+url = os.getenv('URL_455')
 
 def treat_455(driver: Chrome):
     wait = WebDriverWait(driver, 20)
@@ -39,7 +42,7 @@ def treat_455(driver: Chrome):
         hour_click = datetime.now().strftime("%d/%m/%y %H:%M:%S")
         
         time.sleep(2)
-        attempts = 30
+        attempts = int(os.getenv('ATTEMPTS'))
         
         for attempt in range(attempts):
             time.sleep(3)
