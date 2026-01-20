@@ -69,7 +69,8 @@ def acomplish_download(driver: Chrome, index: int, default_extension: str = '.cr
     old_files = validar_arquivos_pasta(downloads_path, '.sswweb')
     download_base(driver, index)
     
-    timeout = time.time() + 60
+    TIMEOUT_DOWNLOAD = os.getenv('TIMEOUT_DOWNLOAD', 60)
+    timeout = time.time() + TIMEOUT_DOWNLOAD
     while time.time() < timeout:
         new_files = validar_arquivos_pasta(downloads_path, '.sswweb')
         downloaded_files = new_files - old_files
