@@ -65,7 +65,7 @@ def download_base(driver: Chrome, index: int):
     
 
 def acomplish_download(driver: Chrome, index: int, default_extension: str = '.crdownload'):
-    downloads_path = os.path.join(os.getcwd(), 'downloads')
+    downloads_path = os.path.join(os.path.expanduser("~"), 'Downloads')
     old_files = validar_arquivos_pasta(downloads_path)
     download_base(driver, index)
     

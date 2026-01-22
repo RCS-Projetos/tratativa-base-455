@@ -1,6 +1,10 @@
 import pandas as pd
 import numpy as np
 from functions import ctrcs_list,searc_ctrcs_registers, merge_ctrcs, new_ctrcs, old_ctrcs, send_registers
+import logging
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logger = logging.getLogger("Robo-455")
 
 def treat_file_455(new_file: str):
     
@@ -145,7 +149,10 @@ def treat_file_455(new_file: str):
         df_new_registers = new_ctrcs(df_registers)
         df_old_registers = old_ctrcs(df_registers)
         
+        logger.info(f"Enviando {len(df_new_registers)} novos registros")
         send_registers(df_new_registers, '455/', 'post')
+
+        logger.info(f"Enviando {len(df_old_registers)} registros antigos")
         send_registers(df_old_registers, '455/bulk-update/', 'patch')
     else:
         print(response.status_code)

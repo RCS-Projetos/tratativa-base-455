@@ -164,7 +164,6 @@ def send_registers(df: pd.DataFrame, url: str, method: str):
                 print(f"Lote {start_idx}-{end_idx} enviado com sucesso.")
             else:
                 print(f"Erro no lote {start_idx}-{end_idx}: {response.status_code}")
-                pd.DataFrame(payload_list).to_json(f'logs/Lote {start_idx}-{end_idx} - {response.status_code}.json', orient='records', lines=True)
-                print(response.text) # Mostra o erro retornado pelo Django para debug
+                print(response.text)
         except Exception as e:
             print(f"Exceção crítica no lote {start_idx}-{end_idx}: {str(e)}") 
