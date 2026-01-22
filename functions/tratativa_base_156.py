@@ -21,8 +21,6 @@ load_dotenv(dotenv_path=env_path)
 def tratar_base_156(file_content: str) -> pd.DataFrame:
     df = pd.read_html(StringIO(file_content), header=0)[0]
     df['Opção'] = df['Opção'].str[0:3]
-    print(StringIO(file_content))
-    print(df.head())
     return df
     
 
@@ -68,7 +66,6 @@ def download_base(driver: Chrome, index: int):
 
 def acomplish_download(driver: Chrome, index: int, default_extension: str = '.crdownload'):
     downloads_path = os.path.join(os.getcwd(), 'downloads')
-    print(f"DEBUG: Procurando arquivos em {downloads_path}")
     old_files = validar_arquivos_pasta(downloads_path)
     download_base(driver, index)
     
