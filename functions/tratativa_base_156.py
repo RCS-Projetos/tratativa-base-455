@@ -21,6 +21,8 @@ load_dotenv(dotenv_path=env_path)
 def tratar_base_156(file_content: str) -> pd.DataFrame:
     df = pd.read_html(StringIO(file_content), header=0)[0]
     df['Opção'] = df['Opção'].str[0:3]
+    print(StringIO(file_content))
+    print(df.head())
     return df
     
 
