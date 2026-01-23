@@ -153,7 +153,7 @@ def treat_file_455(new_file: str):
         send_registers(df_new_registers, '455/', 'post')
 
         logger.info(f"Enviando {len(df_old_registers)} registros antigos")
-        send_registers(df_old_registers, '455/', 'patch')
+        send_registers(df_old_registers, '455/bulk-update/', 'patch')
     else:
         print(response.status_code)
     
