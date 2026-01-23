@@ -111,6 +111,8 @@ def build_payload(row):
             "merchandise_value": clean_decimal(row.get('Merchandise value')),
             "freight_value": clean_decimal(row.get('Freight value')),
             "real_weight": clean_decimal(row.get('Real weight')),
+            "cubic_volume": clean_decimal(row.get('Cubic volume')),
+            "calculated_weight": clean_decimal(row.get('Calculated weight')),
             "volume_quantity": int(clean_decimal(row.get('Volume quantity'))),
             
             # Datas ISO
