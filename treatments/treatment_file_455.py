@@ -139,11 +139,6 @@ def treat_file_455(new_file: str):
     if response.status_code == 200:
         response_data = response.json()
         
-        if not response_data:
-            logger.info("Enviando todos os registros")
-            send_registers(df_tratado, '455/', 'post')
-            return
-
         df_response = pd.DataFrame(response_data)
         
         df_registers = merge_ctrcs(
