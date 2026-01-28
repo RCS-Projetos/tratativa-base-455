@@ -106,6 +106,7 @@ def build_payload(row):
             "digit": clean_text(row.get('Digit')),
             "access_key": clean_text(row.get('Access key')),
             "current_location_description": clean_text(row.get('Current location description')),
+            "delivery_zone": clean_text(row.get('delivery_zone')),
             
             # Valores Numéricos
             "merchandise_value": clean_decimal(row.get('Merchandise value')),
