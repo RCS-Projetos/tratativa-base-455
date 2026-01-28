@@ -51,7 +51,6 @@ def old_ctrcs(df: DataFrame) -> DataFrame:
     df_registered = df[df['id'].notna()].copy()
     df_registered_to_update = df_registered[
         (df_registered['Current location description'] != df_registered['current_location']) | 
-        (df_registered['Delivery due'] != df_registered['delivery_due'])| 
         (df_registered['Delivery zone'] != df_registered['delivery_zone'])
         ]
     return df_registered_to_update
