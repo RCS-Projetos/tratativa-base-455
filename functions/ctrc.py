@@ -40,11 +40,11 @@ def merge_ctrcs(df_file: DataFrame, df_response: DataFrame) -> DataFrame:
             right_on='key',
             how='left'
         )
-
+    
     return df
         
 def new_ctrcs(df: DataFrame) -> DataFrame:
-    df_new_registers = df[(df['access_key'].isna()) & (df['Prefix'].notna())].copy()
+    df_new_registers = df[(df['id'].isna()) & (df['Prefix'].notna())].copy()
     return df_new_registers
 
 def old_ctrcs(df: DataFrame) -> DataFrame:
