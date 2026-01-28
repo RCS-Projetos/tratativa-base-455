@@ -44,7 +44,7 @@ def merge_ctrcs(df_file: DataFrame, df_response: DataFrame) -> DataFrame:
     return df
         
 def new_ctrcs(df: DataFrame) -> DataFrame:
-    df_new_registers = df[(df['id'].isnull()) & (df['Prefix'].notnull())].copy()
+    df_new_registers = df[( (df['Access key'].isnull()) | (df['Access key'] != df['access_key']) ) & (df['Prefix'].notnull())].copy()
     return df_new_registers
 
 def old_ctrcs(df: DataFrame) -> DataFrame:
@@ -164,7 +164,7 @@ def send_registers(df: pd.DataFrame, url: str, method: str):
             
             # Verifica sucesso
             if response.status_code in [200, 201]:
-                print(f"Lote {start_idx}-{end_idx} enviado com sucesso.")
+                print(f"Lote {start_idx}-{end_idx} enviado com sucesso. {"Atualizado"}")
             else:
                 print(f"Erro no lote {start_idx}-{end_idx}: {response.status_code}")
                 print(response.text)
