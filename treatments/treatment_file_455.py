@@ -47,7 +47,7 @@ def treat_file_455(new_file: str):
         'Localizacao Atual': 'Current location description',
         'Previsao de Entrega': 'Delivery due',
         'Entrega Programada': 'Delivery date',
-        'Setor de Destino':'delivery_zone'
+        'Setor de Destino':'Delivery zone'
     }
 
     df.rename(columns=mapa_colunas, inplace=True, errors='ignore')
@@ -128,7 +128,7 @@ def treat_file_455(new_file: str):
             'Cidade de Entrega',
             'UF de Entrega',
             'CEP de Entrega',
-            'delivery_zone'
+            'Delivery zone'
         ]
             ]
     

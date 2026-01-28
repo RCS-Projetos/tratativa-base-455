@@ -49,7 +49,11 @@ def new_ctrcs(df: DataFrame) -> DataFrame:
 
 def old_ctrcs(df: DataFrame) -> DataFrame:
     df_registered = df[df['id'].notna()].copy()
-    df_registered_to_update = df_registered[df_registered['Current location description'] != df_registered['current_location']]
+    df_registered_to_update = df_registered[
+        (df_registered['Current location description'] != df_registered['current_location']) | 
+        (df_registered['Delivery due'] != df_registered['delivery_due'])| 
+        (df_registered['Delivery zone'] != df_registered['delivery_zone'])
+        ]
     return df_registered_to_update
 
 
@@ -106,7 +110,7 @@ def build_payload(row):
             "digit": clean_text(row.get('Digit')),
             "access_key": clean_text(row.get('Access key')),
             "current_location_description": clean_text(row.get('Current location description')),
-            "delivery_zone": clean_text(row.get('delivery_zone')),
+            "delivery_zone": clean_text(row.get('Delivery zone')),
             
             # Valores Numéricos
             "merchandise_value": clean_decimal(row.get('Merchandise value')),
