@@ -3,7 +3,7 @@ import threading
 import logging
 import time
 
-from functions import make_login, driver
+from functions import make_login, driver, make_report_log
 from treatments import treat_455, treat_file_455
 
 
@@ -18,6 +18,9 @@ def ingestao():
     driver_chr = None
     
     try:
+        resp = make_report_log('455', 'STARTED', 'post').json()
+        report_log_id = resp['id']
+
         logger.info("Abrindo navegador...")
         driver_chr = driver()
 
@@ -29,9 +32,10 @@ def ingestao():
         new_file = treat_455(driver_chr)
 
         logger.info("Tratando arquivo e enviando para Produção...")
-        treat_file_455(new_file)
+        treat_file_455(new_file, report_log_id)
 
     except Exception as e:
+        make_report_log('455', 'ERROR', 'patch', report_log_id)
         logger.error(f"Erro ao processar o 455: {str(e)}")
     
     finally:
