@@ -34,12 +34,12 @@ def make_report_log(
 
     # Define a URL e o método dinamicamente
     if req_type == 'post':
-        url = f"{BASE_URL}/report_type/"
+        url = f"{BASE_URL}report_type/"
         method = requests.post
     else:
         if not report_id:
             raise ValueError("O 'report_id' é obrigatório para requisições do tipo PATCH.")
-        url = f"{BASE_URL}/report_type/{report_id}/"
+        url = f"{BASE_URL}report_type/{report_id}/"
         method = requests.patch
 
     # Realiza a chamada única
