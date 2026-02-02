@@ -1,6 +1,7 @@
 import os
 from dotenv import load_dotenv
 from typing import Literal, Optional, Any
+import requests
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 project_root = os.path.dirname(current_dir)
@@ -11,7 +12,7 @@ BASE_URL = os.getenv('BASE_URL')
 
 url_path = lambda x: f'{BASE_URL}{x}'
 
-headers = {
+HEADERS = {
     "Content-Type": "application/json" # Remova se não usar auth
 }
 
