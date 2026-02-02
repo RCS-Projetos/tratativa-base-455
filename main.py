@@ -17,10 +17,10 @@ def ingestao():
     logger.info("🚀 Iniciando ingestão do 455")
     driver_chr = None
     
+    resp = make_report_log('455', 'STARTED', 'post').json()
+    report_log_id = resp['id']
+    
     try:
-        resp = make_report_log('455', 'STARTED', 'post').json()
-        report_log_id = resp['id']
-
         logger.info("Abrindo navegador...")
         driver_chr = driver()
 
