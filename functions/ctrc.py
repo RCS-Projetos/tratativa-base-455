@@ -51,7 +51,8 @@ def old_ctrcs(df: DataFrame) -> DataFrame:
     df_registered = df[df['id'].notna()].copy()
     df_registered_to_update = df_registered[
         (df_registered['Current location description'] != df_registered['current_location']) | 
-        (df_registered['Delivery zone'] != df_registered['delivery_zone'])
+        (df_registered['Delivery zone'] != df_registered['delivery_zone']) | 
+        (pd.to_datetime(df_registered['Delivery due'], dayfirst=True, errors='coerce').dt.strftime('%Y-%m-%d').fillna('') != df_registered['delivery_due'].fillna(''))
         ]
     return df_registered_to_update
 
@@ -170,6 +171,9 @@ def send_registers(df: pd.DataFrame, url: str, method: str):
                 print(f"Lote {start_idx}-{end_idx} enviado com sucesso. {"Atualizado"}")
             else:
                 print(f"Erro no lote {start_idx}-{end_idx}: {response.status_code}")
-                print(response.text)
+                print(f"Erro no lote {start_idx}-{end_idx}: {response.status_code}")
+                with open('error.html', 'w', encoding='utf-8') as f:
+                    f.write(response.text)
+                print("Resposta de erro salva em 'error.html'")
         except Exception as e:
             print(f"Exceção crítica no lote {start_idx}-{end_idx}: {str(e)}") 
