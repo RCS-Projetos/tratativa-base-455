@@ -136,19 +136,36 @@ def treat_file_455(new_file: str, report_log_id: int):
         
         df_tratado = df_tratado.replace({np.nan: None})
 
-        response = searc_ctrcs_registers(
-                ctrcs_list(df_tratado)
+        qtde_ctrcs = len(df_tratado)//6
+
+
+        db_ctrcs_1 = df_tratado[:qtde_ctrcs]
+        db_ctrcs_2 = df_tratado[qtde_ctrcs:qtde_ctrcs*2]
+        db_ctrcs_3 = df_tratado[qtde_ctrcs*2:qtde_ctrcs*3]
+        db_ctrcs_4 = df_tratado[qtde_ctrcs*3:qtde_ctrcs*4]
+        db_ctrcs_5 = df_tratado[qtde_ctrcs*4:qtde_ctrcs*5]
+        db_ctrcs_6 = df_tratado[qtde_ctrcs*5:]
+
+        db_ctrcs = [db_ctrcs_1, db_ctrcs_2, db_ctrcs_3, db_ctrcs_4, db_ctrcs_5, db_ctrcs_6]
+
+        response = []
+        
+        for i in db_ctrcs:
+            print(f"Buscando {len(i)} de {len(df_tratado)} registros")
+            response_api = searc_ctrcs_registers(
+                ctrcs_list(i)
             )
 
-        if response.status_code == 200:
-            response_data = response.json()
-            
-            if not response_data:
-                logger.info("Enviando todos os registros")
-                send_registers(df_tratado, '455/', 'post')
-                return
+            if response_api.status_code == 200:
+                response_data = response_api.json()
+                print(F'Item encontrado')
+                response.extend(response_data)
+            else:
+                print(F'Item não encontrado')
+        
 
-            df_response = pd.DataFrame(response_data)
+        if response:            
+            df_response = pd.DataFrame(response)
             
             df_registers = merge_ctrcs(
                 df_tratado,
@@ -163,8 +180,13 @@ def treat_file_455(new_file: str, report_log_id: int):
 
             logger.info(f"Enviando {len(df_old_registers)} registros antigos")
             send_registers(df_old_registers, '455/bulk-update/', 'patch')
+
         else:
-            print(response.status_code)
+            logger.info("Enviando todos os registros")
+            send_registers(df_tratado, '455/', 'post')
+            os.remove(new_file)
+            make_report_log('455', 'FINISHED', 'patch', report_log_id)
+            return
             
         os.remove(new_file)
         

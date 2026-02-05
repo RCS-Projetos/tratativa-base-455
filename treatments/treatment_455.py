@@ -25,7 +25,7 @@ def treat_455(driver: Chrome):
             # ("/html/body/form/input[2]", filial),
             ("/html/body/form/input[10]", data_inicial),
             ("/html/body/form/input[11]", data_final),
-            ("/html/body/form/input[20]", "P"),
+            ("/html/body/form/input[20]", "T"),
             ("/html/body/form/input[31]", "E"),
             ("/html/body/form/input[32]", "B"),
             ("/html/body/form/input[33]", "F")
