@@ -52,8 +52,7 @@ def old_ctrcs(df: DataFrame) -> DataFrame:
     df_registered_to_update = df_registered[
         (df_registered['Current location description'] != df_registered['current_location']) | 
         (df_registered['Delivery zone'] != df_registered['delivery_zone']) | 
-        (df_registered['Write off type'] != df_registered['write_off_type']) | 
-        (pd.to_datetime(df_registered['Delivery due'], dayfirst=True, errors='coerce').dt.strftime('%Y-%m-%d').fillna('') != df_registered['delivery_due'].fillna(''))
+        (df_registered['Write off type'] != df_registered['write_off_type'])
         ]
     return df_registered_to_update
 
