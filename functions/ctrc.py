@@ -50,12 +50,20 @@ def new_ctrcs(df: DataFrame) -> DataFrame:
 def old_ctrcs(df: DataFrame) -> DataFrame:
     df_registered = df[df['id'].notna()].copy()
     
+    # Função auxiliar para extrair texto de dicionários se necessário
+    def extract_text(val):
+        if isinstance(val, dict):
+            return str(val.get('name') or val.get('description') or val.get('code') or '')
+        return str(val) if pd.notna(val) else ''
+
     # Normalização de strings para comparação robusta
-    # Remove .0 de floats convertidos para string e espaços em branco
     def normalize(series):
-        return series.fillna('').astype(str).str.replace(r'\.0$', '', regex=True).str.strip()
+        # Primeiro extrai texto de objetos/dicts se houver, converte tudo para string
+        s = series.apply(extract_text)
+        # Remove .0 de floats, espaços extras e converte para minúsculo
+        return s.str.replace(r'\.0$', '', regex=True).str.strip().str.lower()
     
-    # Normalização de datas para YYYY-MM-DD em ambos os lados
+    # Normalização de datas para YYYY-MM-DD
     def normalize_date(series):
         return pd.to_datetime(series, dayfirst=True, errors='coerce').dt.strftime('%Y-%m-%d').fillna('')
 
