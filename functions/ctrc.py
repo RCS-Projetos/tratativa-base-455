@@ -49,12 +49,24 @@ def new_ctrcs(df: DataFrame) -> DataFrame:
 
 def old_ctrcs(df: DataFrame) -> DataFrame:
     df_registered = df[df['id'].notna()].copy()
-    df_registered_to_update = df_registered[
-        (df_registered['Current location description'].fillna('') != df_registered['current_location'].fillna('')) | 
-        (df_registered['Delivery zone'].fillna('') != df_registered['delivery_zone'].fillna('')) | 
-        (df_registered['Write off type'].fillna('') != df_registered['write_off_type'].fillna('')) | 
-        (pd.to_datetime(df_registered['Delivery due'], dayfirst=True, errors='coerce').dt.strftime('%Y-%m-%d').fillna('') != df_registered['delivery_due'].fillna(''))
-        ]
+    
+    # Normalização de strings para comparação robusta
+    # Remove .0 de floats convertidos para string e espaços em branco
+    def normalize(series):
+        return series.fillna('').astype(str).str.replace(r'\.0$', '', regex=True).str.strip()
+    
+    # Normalização de datas para YYYY-MM-DD em ambos os lados
+    def normalize_date(series):
+        return pd.to_datetime(series, dayfirst=True, errors='coerce').dt.strftime('%Y-%m-%d').fillna('')
+
+    mask = (
+        (normalize(df_registered['Current location description']) != normalize(df_registered['current_location'])) | 
+        (normalize(df_registered['Delivery zone']) != normalize(df_registered['delivery_zone'])) | 
+        (normalize(df_registered['Write off type']) != normalize(df_registered['write_off_type'])) | 
+        (normalize_date(df_registered['Delivery due']) != normalize_date(df_registered['delivery_due']))
+    )
+    
+    df_registered_to_update = df_registered[mask]
     return df_registered_to_update
 
 
