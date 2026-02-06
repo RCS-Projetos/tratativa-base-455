@@ -50,9 +50,9 @@ def new_ctrcs(df: DataFrame) -> DataFrame:
 def old_ctrcs(df: DataFrame) -> DataFrame:
     df_registered = df[df['id'].notna()].copy()
     df_registered_to_update = df_registered[
-        (df_registered['Current location description'] != df_registered['current_location']) | 
-        ((df_registered['Delivery zone'] != df_registered['delivery_zone']) & (df_registered['delivery_zone'].notna())) | 
-        (df_registered['Write off type'] != df_registered['write_off_type']) | 
+        (df_registered['Current location description'].fillna('') != df_registered['current_location'].fillna('')) | 
+        (df_registered['Delivery zone'].fillna('') != df_registered['delivery_zone'].fillna('')) | 
+        (df_registered['Write off type'].fillna('') != df_registered['write_off_type'].fillna('')) | 
         (pd.to_datetime(df_registered['Delivery due'], dayfirst=True, errors='coerce').dt.strftime('%Y-%m-%d').fillna('') != df_registered['delivery_due'].fillna(''))
         ]
     return df_registered_to_update
