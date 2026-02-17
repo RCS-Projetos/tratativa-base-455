@@ -71,7 +71,8 @@ def old_ctrcs(df: DataFrame) -> DataFrame:
         (normalize(df_registered['Current location description']) != normalize(df_registered['current_location'])) | 
         (normalize(df_registered['Delivery zone']) != normalize(df_registered['delivery_zone'])) | 
         (normalize(df_registered['Write off type']) != normalize(df_registered['write_off_type'])) | 
-        (normalize_date(df_registered['Delivery due']) != normalize_date(df_registered['delivery_due']))
+        (normalize_date(df_registered['Delivery due']) != normalize_date(df_registered['delivery_due'])) |
+        (normalize(df_registered['Receiving unit']) != normalize(df_registered['receiving_unit']))
     )
     
     df_registered_to_update = df_registered[mask]

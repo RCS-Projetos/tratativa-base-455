@@ -164,7 +164,7 @@ def treat_file_455(new_file: str, report_log_id: int):
                 print(F'Item não encontrado')
         
 
-        if response:            
+        if response:             
             df_response = pd.DataFrame(response)
             
             df_registers = merge_ctrcs(
