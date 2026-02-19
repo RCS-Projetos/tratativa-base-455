@@ -144,7 +144,6 @@ def build_payload(row):
             
             # Datas ISO
             "delivery_due": clean_date(row.get('Delivery due')),
-            "delivery_date": clean_date(row.get('Delivery date')),
             "emission_date": clean_date(row.get('emission_date'), is_datetime=True),
             "authorization_date": clean_date(row.get('authorization_date'), is_datetime=True),
             

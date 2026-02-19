@@ -48,7 +48,6 @@ def treat_file_455(new_file: str, report_log_id: int):
             'Praca Expedidora': 'Dispatch place',
             'Localizacao Atual': 'Current location description',
             'Previsao de Entrega': 'Delivery due',
-            'Entrega Programada': 'Delivery date',
             'Setor de Destino':'Delivery zone'
         }
 
@@ -99,7 +98,6 @@ def treat_file_455(new_file: str, report_log_id: int):
                 'Dispatch place',
                 'Current location description',
                 'Delivery due',
-                'Delivery date',
                 'emission_date',
                 'authorization_date',
 
