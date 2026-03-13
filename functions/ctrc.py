@@ -65,7 +65,17 @@ def old_ctrcs(df: DataFrame) -> DataFrame:
     
     # Normalização de datas para YYYY-MM-DD
     def normalize_date(series):
-        return pd.to_datetime(series, dayfirst=True, errors='coerce').dt.strftime('%Y-%m-%d').fillna('')
+        # 1. Tenta ler no formato exato do banco de dados (YYYY-MM-DD)
+        s_banco = pd.to_datetime(series, format='%Y-%m-%d', errors='coerce')
+        
+        # 2. Tenta ler no formato da planilha (DD/MM/YYYY) com dayfirst=True
+        s_planilha = pd.to_datetime(series, dayfirst=True, errors='coerce')
+        
+        # 3. Combina os dois: se falhou no formato do banco (ficou NaT), usa o da planilha
+        s_final = s_banco.fillna(s_planilha)
+        
+        # 4. Converte tudo para string padronizada
+        return s_final.dt.strftime('%Y-%m-%d').fillna('')
 
     mask = (
         (normalize(df_registered['Current location description']) != normalize(df_registered['current_location'])) | 
@@ -183,6 +193,7 @@ def send_registers(df: pd.DataFrame, url: str, method: str):
             if method == 'post':
                 response = rq.post(url_path(url), json=payload_list, headers=headers)
             elif method == 'patch':
+                print(payload_list[0:3])
                 response = rq.patch(url_path(url), json=payload_list, headers=headers)
             else:
                 raise 'Nenhum metodo selecionado.' 
@@ -198,3 +209,27 @@ def send_registers(df: pd.DataFrame, url: str, method: str):
                 print("Resposta de erro salva em 'error.html'")
         except Exception as e:
             print(f"Exceção crítica no lote {start_idx}-{end_idx}: {str(e)}") 
+
+data = {
+    "Key": "AXA045062-6",
+    "Access key": "31260219451038004449570010000444161015380924 ",
+    "Delivery zone": "05  SUMARE",
+    "Receiving unit": "CPQ",
+    "Write off type": "FATURADO",
+    "Delivery due": "05/03/2026",
+    "Current location description": "CTRC ENTREGUE/BAIXADO",
+    "id": 871201,
+    "key": "AXA045062-6",
+    "current_location": "CTRC ENTREGUE/BAIXADO",
+    "access_key": "31260219451038004449570010000444161015380924",
+    "delivery_zone": "05  SUMARE",
+    "delivery_due": "2026-03-05",
+    "write_off_type": "faturado",
+    "receiving_unit": "CPQ"
+}
+
+df = pd.DataFrame([data])
+print(df)
+
+df = old_ctrcs(df)
+print(df)
