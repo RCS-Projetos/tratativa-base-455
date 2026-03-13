@@ -193,7 +193,6 @@ def send_registers(df: pd.DataFrame, url: str, method: str):
             if method == 'post':
                 response = rq.post(url_path(url), json=payload_list, headers=headers)
             elif method == 'patch':
-                print(payload_list[0:3])
                 response = rq.patch(url_path(url), json=payload_list, headers=headers)
             else:
                 raise 'Nenhum metodo selecionado.' 
