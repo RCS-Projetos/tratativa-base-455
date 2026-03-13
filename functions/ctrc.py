@@ -209,27 +209,3 @@ def send_registers(df: pd.DataFrame, url: str, method: str):
                 print("Resposta de erro salva em 'error.html'")
         except Exception as e:
             print(f"Exceção crítica no lote {start_idx}-{end_idx}: {str(e)}") 
-
-data = {
-    "Key": "AXA045062-6",
-    "Access key": "31260219451038004449570010000444161015380924 ",
-    "Delivery zone": "05  SUMARE",
-    "Receiving unit": "CPQ",
-    "Write off type": "FATURADO",
-    "Delivery due": "05/03/2026",
-    "Current location description": "CTRC ENTREGUE/BAIXADO",
-    "id": 871201,
-    "key": "AXA045062-6",
-    "current_location": "CTRC ENTREGUE/BAIXADO",
-    "access_key": "31260219451038004449570010000444161015380924",
-    "delivery_zone": "05  SUMARE",
-    "delivery_due": "2026-03-05",
-    "write_off_type": "faturado",
-    "receiving_unit": "CPQ"
-}
-
-df = pd.DataFrame([data])
-print(df)
-
-df = old_ctrcs(df)
-print(df)
