@@ -34,6 +34,7 @@ class Download:
             
             if file:
                 file_name = max(file, key=os.path.getctime)
+                print(file_name)
                 
                 if not file_name.endswith('.crdownload'):
                     self.logger.info(f"Download concluído: {file_name}")
