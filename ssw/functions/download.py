@@ -25,12 +25,14 @@ class Download:
     def download(self):
         self.logger.info("Iniciando download")
         downloaded_files = self.files().get_downloaded_file()
-        
+        self.logger.info(f'Arquivos antigos: {downloaded_files}')
         self.press_download()
 
         timeout = time.time() + self.timeout
         while time.time() < timeout:
-            file = self.files().get_downloaded_file() - downloaded_files
+            new_files = self.files().get_downloaded_file()
+            self.logger.info(f'Arquivos novos: {new_files}')
+            file = new_files - downloaded_files
             
             if file:
                 file_name = max(file, key=os.path.getctime)
