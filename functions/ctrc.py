@@ -199,9 +199,8 @@ def send_registers(df: pd.DataFrame, url: str, method: str):
             
             # Verifica sucesso
             if response.status_code in [200, 201]:
-                print(f"Lote {start_idx}-{end_idx} enviado com sucesso. {"Atualizado"}")
+                print(f"Lote {start_idx}-{end_idx} enviado com sucesso. {"Atualizado" if method == 'patch' else 'Criado'}")
             else:
-                print(f"Erro no lote {start_idx}-{end_idx}: {response.status_code}")
                 print(f"Erro no lote {start_idx}-{end_idx}: {response.status_code}")
                 with open('error.html', 'w', encoding='utf-8') as f:
                     f.write(response.text)
