@@ -29,14 +29,13 @@ class Download:
         self.press_download()
 
         timeout = time.time() + self.timeout
+        self.logger.info(f'Tempo atual: {time.time()}')
+        self.logger.info(f'Tempo final: {timeout}')
         while time.time() < timeout:
-            new_files = self.files().get_downloaded_file()
-            self.logger.info(f'Arquivos novos: {new_files}')
-            file = new_files - downloaded_files
+            file = self.files().get_downloaded_file() - downloaded_files
             
             if file:
                 file_name = max(file, key=os.path.getctime)
-                print(file_name)
                 
                 if not file_name.endswith('.crdownload'):
                     self.logger.info(f"Download concluído: {file_name}")
