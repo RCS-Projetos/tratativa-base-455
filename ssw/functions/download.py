@@ -5,7 +5,7 @@ from .logger import Logger
 
 
 class Download:
-    def __init__(self, driver, index: int, default_extension: str = '.csv', download_dir: str = 'Downloads', timeout: int = 60):
+    def __init__(self, driver, index: int, default_extension: str = '.sswweb', download_dir: str = 'Downloads', timeout: int = 240):
         self.logger = Logger()
         self.driver = driver
         self.index = index

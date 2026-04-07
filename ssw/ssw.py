@@ -50,7 +50,7 @@ class SSW:
                 return index
         return False
 
-    def download_156(self, report: str, sended_time: str, default_extension: str = '.csv'):
+    def download_156(self, report: str, sended_time: str, default_extension: str = '.sswweb'):
         index = self.get_index(report, sended_time)
         if not index:
             return False
