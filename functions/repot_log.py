@@ -1,6 +1,6 @@
 import os
 from dotenv import load_dotenv
-from typing import Literal, Optional, Any
+from typing import Literal, Optional
 import requests
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
