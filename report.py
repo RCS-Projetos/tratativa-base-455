@@ -267,7 +267,7 @@ class Report(SSW):
                 
                 self.logger.info("Enviando documentos")
                 
-                BATCH_SIZE = 20
+                BATCH_SIZE = 1000
                 
                 for i in range(0, len(payload), BATCH_SIZE):
                     self.logger.info(f"Enviando lote {i+BATCH_SIZE} de {len(payload)}")
