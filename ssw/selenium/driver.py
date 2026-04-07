@@ -14,6 +14,9 @@ class Driver:
         self._action = ActionChains(self._driver)
 
     def options(self, headless: bool = True, download_dir: str = 'Downloads'):
+        
+        download_folder = os.path.join(os.path.expanduser("~"), download_dir)
+        
         options = webdriver.ChromeOptions()
         if headless:
             options.add_argument('--headless')
@@ -23,18 +26,20 @@ class Driver:
         options.add_argument('--disable-blink-features=AutomationControlled')
         options.add_argument('--window-size=1920,1080')
         options.add_experimental_option("prefs", {
-            "download.default_directory": download_dir,
+            "download.default_directory": download_folder,
             "download.prompt_for_download": False,
             "download.directory_upgrade": True,
             "safebrowsing.enabled": True
         })
 
-        if not os.path.exists(download_dir):
+        if not os.path.exists(download_folder):
             try:
-                os.makedirs(download_dir)
+                os.makedirs(download_folder)
             except Exception as e:
                 self.logger.error(f"Error creating dir: {e}")
 
+        os.chmod(download_folder, 0o777)
+        
         return options
 
     def get(self, url: str):
