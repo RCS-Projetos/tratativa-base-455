@@ -18,6 +18,7 @@ class Download:
         return Files(self.download_dir, self.default_extension)
     
     def press_download(self):
+        self.logger.info(f'Pressionando botão de download na linha {self.index}')
         download_button = self.driver.wait_until(self.download_button)
         self.driver.driver().execute_script("arguments[0].click();", download_button)
     
