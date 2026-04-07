@@ -22,7 +22,7 @@ class Report(SSW):
         self.args = args
         self.file_path: str = ''
         self.payload:list = []
-    
+        self.logger.set_report('455')
     
     def build_args(self, args: list[dict], act:str='ENV', dummy: str = '1773317330121'):
         
@@ -31,6 +31,7 @@ class Report(SSW):
         self.args.extend(args)
         
     def report(self, url:str):
+        self.logger.start_report()
         args_str = ';\n        '.join([f'formData.append("{arg["key"]}", "{arg["value"]}")' for arg in self.args])
         
         script = f'''
@@ -288,9 +289,11 @@ class Report(SSW):
             os.remove(self.file_path)
             
             self.logger.info("455 processado com sucesso")
+            self.logger.finish_report()
             
         except Exception as e:
             self.logger.error(f"Erro ao processar o 455: {str(e)}")
+            self.logger.error_report()
     
     def clean_decimal(self, value):
         if pd.isna(value) or str(value).strip() == '': return 0.0

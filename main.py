@@ -85,3 +85,4 @@ def trigger_robo(payload: RoboRequest, background_tasks: BackgroundTasks):
 def health():
     return {"status": "online", "service": "Ingestão Relatório 930"}
 
+
