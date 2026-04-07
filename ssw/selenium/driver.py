@@ -9,9 +9,21 @@ from ..functions.logger import Logger
 
 class Driver:
     def __init__(self, headless: bool = True, download_dir: str = 'Downloads'):
-        self._driver = webdriver.Chrome(options=self.options(headless, download_dir))
+        self.logger = Logger()
+        
+        # Garante que o caminho do download seja absoluto e consistente com a classe Files
+        abs_download_dir = os.path.join(os.path.expanduser("~"), download_dir)
+        
+        self._driver = webdriver.Chrome(options=self.options(headless, abs_download_dir))
         self._wait = WebDriverWait(self._driver, 20)
         self._action = ActionChains(self._driver)
+        
+        # CORREÇÃO PARA LINUX/HEADLESS: Permite downloads em modo headless através do CDP
+        if headless:
+            self._driver.execute_cdp_cmd("Page.setDownloadBehavior", {
+                "behavior": "allow",
+                "downloadPath": abs_download_dir
+            })
 
     def options(self, headless: bool = True, download_dir: str = 'Downloads'):
         options = webdriver.ChromeOptions()
@@ -22,6 +34,7 @@ class Driver:
         options.add_argument('--disable-dev-shm-usage')
         options.add_argument('--disable-blink-features=AutomationControlled')
         options.add_argument('--window-size=1920,1080')
+        
         options.add_experimental_option("prefs", {
             "download.default_directory": download_dir,
             "download.prompt_for_download": False,
@@ -31,7 +44,7 @@ class Driver:
 
         if not os.path.exists(download_dir):
             try:
-                os.makedirs(download_dir)
+                os.makedirs(download_dir, exist_ok=True)
             except Exception as e:
                 self.logger.error(f"Error creating dir: {e}")
 
