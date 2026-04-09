@@ -234,7 +234,10 @@ class Report(SSW):
                 self.logger.info("Separando documentos")
                 
                 if self.documents == 'new':
-                    df_documents = df_new_registers[['Key', 'nfes']].copy()
+                    os.remove(self.file_path)  
+                    self.logger.info("455 processado com sucesso")
+                    self.logger.finish_report()
+                    return
                 else:
                     df_documents = df_registers[['Key', 'nfes']].copy()
                 

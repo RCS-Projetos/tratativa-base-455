@@ -199,7 +199,7 @@ def send_registers(df: pd.DataFrame, url: str, method: str):
                 raise 'Nenhum metodo selecionado.' 
             
             # Verifica sucesso
-            if response.status_code in [200, 201]:
+            if response.status_code in [200, 201, 202]:
                 print(f"Lote {start_idx}-{end_idx} enviado com sucesso. {"Atualizado" if method == 'patch' else 'Criado'}")
             else:
                 print(f"Erro no lote {start_idx}-{end_idx}: {response.status_code}")
