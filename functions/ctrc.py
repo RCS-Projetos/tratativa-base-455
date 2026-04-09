@@ -169,7 +169,8 @@ def build_payload(row):
             "sender": build_customer("sender", "CNPJ Remetente", "Sender", "Endereco do Remetente", "Bairro do Remetente", "Cidade do Remetente", "UF do Remetente", "CEP do Remetente"),
             "recipient": build_customer("recipient", "CNPJ Destinatario", "Recipient", "Endereco do Destinatario", "Bairro do Destinatario", "Cidade do Destinatario", "UF do Destinatario", "CEP do Destinatario"),
             "payer": build_customer("payer", "CNPJ Pagador", "Payer", "Endereco do Pagador", "Bairro do Pagador", "Cidade do Pagador", "UF do Pagador", None),
-            "dispatcher": build_customer("dispatcher", "CNPJ Expedidor", "Dispatcher", "Endereco do Remetente", "Bairro do Remetente", "Cidade do Expedidor", "UF do Expedidor", None)
+            "dispatcher": build_customer("dispatcher", "CNPJ Expedidor", "Dispatcher", "Endereco do Remetente", "Bairro do Remetente", "Cidade do Expedidor", "UF do Expedidor", None),
+            "nfes": clean_text(row.get('nfes'))
         }
         
         # Remove chaves com valor None para limpar o payload
