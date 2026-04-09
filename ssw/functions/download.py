@@ -26,7 +26,6 @@ class Download:
     def download(self):
         self.logger.info("Iniciando download")
         downloaded_files = self.files().get_downloaded_file()
-        self.logger.info(f'Arquivos antigos: {downloaded_files}')
         self.press_download()
 
         timeout = time.time() + self.timeout
