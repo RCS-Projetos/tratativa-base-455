@@ -278,7 +278,7 @@ class Report(SSW):
                     self.logger.info(f"Enviando lote {i+BATCH_SIZE} de {len(payload)}")
                     if payload[i:i+BATCH_SIZE]:
                         response = rq.post(f'{BASE_URL}455/document/', json=payload[i:i+BATCH_SIZE], timeout=TIMEOUT)
-                        if response.status_code in [200,201]:
+                        if response.status_code in [200,201,202]:
                             self.logger.info(f"Lote {i+BATCH_SIZE} de {len(payload)} enviado com sucesso")
                         else:
                             self.logger.error(f"Erro ao enviar lote {i+BATCH_SIZE} de {len(payload)}")
