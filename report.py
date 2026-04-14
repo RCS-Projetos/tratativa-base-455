@@ -98,7 +98,8 @@ class Report(SSW):
                 'Praca Expedidora': 'Dispatch place',
                 'Localizacao Atual': 'Current location description',
                 'Previsao de Entrega': 'Delivery due',
-                'Setor de Destino':'Delivery zone'
+                'Setor de Destino':'Delivery zone',
+                'Chaves NF-es':'nfes'
             }
 
             df.rename(columns=mapa_colunas, inplace=True, errors='ignore')
@@ -150,7 +151,7 @@ class Report(SSW):
                     'Delivery due',
                     'emission_date',
                     'authorization_date',
-                    'Chaves NF-es',
+                    'nfes',
 
                     # --- Itens Novos / Diferença (Português) ---
                     'CNPJ Remetente',
@@ -233,21 +234,24 @@ class Report(SSW):
                 self.logger.info("Separando documentos")
                 
                 if self.documents == 'new':
-                    df_documents = df_new_registers[['Key', 'Chaves NF-es']].copy()
+                    os.remove(self.file_path)  
+                    self.logger.info("455 processado com sucesso")
+                    self.logger.finish_report()
+                    return
                 else:
-                    df_documents = df_registers[['Key', 'Chaves NF-es']].copy()
+                    df_documents = df_registers[['Key', 'nfes']].copy()
                 
                 # Assegurar formato de lista para múltiplas chaves separadas por vírgula e explodir
-                df_documents['Chaves NF-es'] = df_documents['Chaves NF-es'].astype(str).str.split(',')
-                df_documents = df_documents.explode('Chaves NF-es')
-                df_documents['Chaves NF-es'] = df_documents['Chaves NF-es'].str.strip()
+                df_documents['nfes'] = df_documents['nfes'].astype(str).str.split(',')
+                df_documents = df_documents.explode('nfes')
+                df_documents['nfes'] = df_documents['nfes'].str.strip()
                 
                 # Filtrar apenas as chaves de tamanho válido (44 caracteres) para fatiar adequadamente
-                df_documents = df_documents[df_documents['Chaves NF-es'].str.len() == 44]
+                df_documents = df_documents[df_documents['nfes'].str.len() == 44]
                 
                 # As posições [25:34] e [22:25] estão corretas para chaves NF-e de 44 dígitos
-                df_documents['number'] = df_documents['Chaves NF-es'].str[25:34]
-                df_documents['serie'] = df_documents['Chaves NF-es'].str[22:25]
+                df_documents['number'] = df_documents['nfes'].str[25:34]
+                df_documents['serie'] = df_documents['nfes'].str[22:25]
                 
                 self.logger.info("Criando payload")
                 payload = []
@@ -256,7 +260,7 @@ class Report(SSW):
                         'shipment_key': self.clean_text(row['Key']),
                         'number': self.clean_decimal(row['number']),
                         'serie': self.clean_decimal(row['serie']),
-                        'key': self.clean_text(row['Chaves NF-es'])
+                        'key': self.clean_text(row['nfes'])
                     })
                 
                 BASE_URL = os.getenv('BASE_URL')
@@ -268,7 +272,7 @@ class Report(SSW):
                 
                 self.logger.info("Enviando documentos")
                 
-                BATCH_SIZE = 1000
+                BATCH_SIZE = 100
                 
                 for i in range(0, len(payload), BATCH_SIZE):
                     self.logger.info(f"Enviando lote {i+BATCH_SIZE} de {len(payload)}")

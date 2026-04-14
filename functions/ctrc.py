@@ -169,7 +169,8 @@ def build_payload(row):
             "sender": build_customer("sender", "CNPJ Remetente", "Sender", "Endereco do Remetente", "Bairro do Remetente", "Cidade do Remetente", "UF do Remetente", "CEP do Remetente"),
             "recipient": build_customer("recipient", "CNPJ Destinatario", "Recipient", "Endereco do Destinatario", "Bairro do Destinatario", "Cidade do Destinatario", "UF do Destinatario", "CEP do Destinatario"),
             "payer": build_customer("payer", "CNPJ Pagador", "Payer", "Endereco do Pagador", "Bairro do Pagador", "Cidade do Pagador", "UF do Pagador", None),
-            "dispatcher": build_customer("dispatcher", "CNPJ Expedidor", "Dispatcher", "Endereco do Remetente", "Bairro do Remetente", "Cidade do Expedidor", "UF do Expedidor", None)
+            "dispatcher": build_customer("dispatcher", "CNPJ Expedidor", "Dispatcher", "Endereco do Remetente", "Bairro do Remetente", "Cidade do Expedidor", "UF do Expedidor", None),
+            "nfes": clean_text(row.get('nfes'))
         }
         
         # Remove chaves com valor None para limpar o payload
@@ -198,7 +199,7 @@ def send_registers(df: pd.DataFrame, url: str, method: str):
                 raise 'Nenhum metodo selecionado.' 
             
             # Verifica sucesso
-            if response.status_code in [200, 201]:
+            if response.status_code in [200, 201, 202]:
                 print(f"Lote {start_idx}-{end_idx} enviado com sucesso. {"Atualizado" if method == 'patch' else 'Criado'}")
             else:
                 print(f"Erro no lote {start_idx}-{end_idx}: {response.status_code}")

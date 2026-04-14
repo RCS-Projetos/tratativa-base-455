@@ -5,6 +5,7 @@ import threading
 import logging
 import time
 from datetime import datetime, timedelta
+import calendar
 from pydantic import BaseModel
 from typing import Optional
 
@@ -49,20 +50,38 @@ def executar_automacao(d_inicial: str, d_final: str, documents:str = 'new'):
     report.execute_report(url = 'https://sistema.ssw.inf.br/bin/ssw0230')
     report.process_report()
 
+def subtrair_um_mes(dt: datetime) -> datetime:
+    year = dt.year
+    month = dt.month - 1
+    if month == 0:
+        year -= 1
+        month = 12
+    day = min(dt.day, calendar.monthrange(year, month)[1])
+    return dt.replace(year=year, month=month, day=day)
+
 def executar_historico(d_inicial: str, d_final: str):
     data_inicial = datetime.strptime(d_inicial, "%d%m%y")
     data_final = datetime.strptime(d_final, "%d%m%y")
     
-    while data_inicial <= data_final:
+    # Não pode ultrapassar a data atual
+    if data_final > datetime.now():
+        data_final = datetime.now()
+        
+    current_end = data_final
+    
+    while current_end > data_inicial:
+        current_start = subtrair_um_mes(current_end)
+        if current_start < data_inicial:
+            current_start = data_inicial
+            
         try:
-            logger.info(f"Executando automação para a data: {data_inicial.strftime('%d/%m/%Y')} até {(data_inicial + timedelta(days=30)).strftime('%d/%m/%Y')}")
-            executar_automacao(data_inicial.strftime("%d%m%y"), (data_inicial + timedelta(days=30)).strftime("%d%m%y"), 'all')
-            data_inicial += timedelta(days=30)
-            data_inicial = datetime.now() if data_inicial > datetime.now() else data_inicial
+            logger.info(f"Executando automação para a data: {current_start.strftime('%d/%m/%Y')} até {current_end.strftime('%d/%m/%Y')}")
+            executar_automacao(current_start.strftime("%d%m%y"), current_end.strftime("%d%m%y"), 'all')
         except Exception as e:
-            logger.error(f"Erro ao executar automação para a data: {data_inicial.strftime('%d/%m/%Y')}")
+            logger.error(f"Erro ao executar automação para o período: {current_start.strftime('%d/%m/%Y')} até {current_end.strftime('%d/%m/%Y')}")
             logger.error(str(e))
-            continue
+            
+        current_end = current_start
 
 
 @app.post("/executar/")
