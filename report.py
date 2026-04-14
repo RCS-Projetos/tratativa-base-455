@@ -273,16 +273,31 @@ class Report(SSW):
                 self.logger.info("Enviando documentos")
                 
                 BATCH_SIZE = 100
+                session = rq.Session()
                 
                 for i in range(0, len(payload), BATCH_SIZE):
                     self.logger.info(f"Enviando lote {i+BATCH_SIZE} de {len(payload)}")
-                    if payload[i:i+BATCH_SIZE]:
-                        response = rq.post(f'{BASE_URL}455/document/', json=payload[i:i+BATCH_SIZE], timeout=TIMEOUT)
-                        if response.status_code in [200,201,202]:
-                            self.logger.info(f"Lote {i+BATCH_SIZE} de {len(payload)} enviado com sucesso")
-                        else:
-                            self.logger.error(f"Erro ao enviar lote {i+BATCH_SIZE} de {len(payload)}")
-                            self.logger.error(response.json())
+                    batch_payload = payload[i:i+BATCH_SIZE]
+                    if batch_payload:
+                        max_tentativas = 3
+                        for tentativa in range(max_tentativas):
+                            try:
+                                response = session.post(f'{BASE_URL}455/document/', json=batch_payload, timeout=TIMEOUT)
+                                if response.status_code in [200, 201, 202]:
+                                    self.logger.info(f"Lote {i+BATCH_SIZE} de {len(payload)} enviado com sucesso")
+                                else:
+                                    self.logger.error(f"Erro ao enviar lote {i+BATCH_SIZE} de {len(payload)}")
+                                    try:
+                                        self.logger.error(response.json())
+                                    except:
+                                        pass
+                                break  # Sai do loop de tentativas se não houver erro de exceção
+                            except rq.exceptions.RequestException as e:
+                                self.logger.error(f"Timeout/Erro na conexão no lote {i+BATCH_SIZE} (Tentativa {tentativa+1}/{max_tentativas}): {str(e)}")
+                                if tentativa < max_tentativas - 1:
+                                    time.sleep(5)  # Aguarda 5 segundos antes de tentar novamente
+                                else:
+                                    self.logger.error(f"O lote {i+BATCH_SIZE} foi ignorado devido a erros repetidos.")
                 
             else:
                 self.logger.info("Enviando todos os registros")
