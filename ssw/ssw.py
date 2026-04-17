@@ -1,5 +1,6 @@
 import os
 import time
+import random
 from dotenv import load_dotenv
 from .functions import Login
 from .selenium import Driver
@@ -12,10 +13,20 @@ load_dotenv()
 class SSW:
     def __init__(self, driver: Driver, download_dir: str = 'Downloads'):
         self.logger = Logger()
-        self.tax = os.getenv("SSW_TAX")
         self.company = os.getenv("SSW_COMPANY")
-        self.user = os.getenv("SSW_USER")
-        self.password = os.getenv("SSW_PASSWORD")
+        users = os.getenv("SSW_USER", "").split(',')
+        passwords = os.getenv("SSW_PASSWORD", "").split(',')
+        taxes = os.getenv("SSW_TAX", "").split(',')
+        used_user = ''
+        
+        self.credentials = []
+        for u, p, t in zip(users, passwords, taxes):
+            self.credentials.append({
+                'user': u.strip(),
+                'password': p.strip(),
+                'tax': t.strip()
+            })
+        
         self.batch_size = int(os.getenv("BATCH_SIZE"))
         self.attemps = int(os.getenv("ATTEMPTS"))
         self.download_dir = download_dir
@@ -27,7 +38,13 @@ class SSW:
     def make_login(self):
         url = 'https://sistema.ssw.inf.br/bin/ssw0422'
         self.logger.info("Realizando login")
-        login = Login(self.driver_instance, self.company, self.tax, self.user, self.password, url)
+        
+        # Seleciona uma credencial aleatória
+        cred = random.choice(self.credentials)
+        self.logger.info(f"Usando usuário: {cred['user']}")
+        self.used_user = cred['user']
+        
+        login = Login(self.driver_instance, self.company, cred['tax'], cred['user'], cred['password'], url)
         login.login()
         time.sleep(1)
         self.logger.info("Login realizado")
