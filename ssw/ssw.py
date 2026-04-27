@@ -61,7 +61,7 @@ class SSW:
         
         for attempt in range(self.attemps):
             time.sleep(3)
-            report_downloader = ReportDownloader(self.driver_instance, report, sended_time)
+            report_downloader = ReportDownloader(self.driver_instance, report, self.used_user, sended_time)
             index = report_downloader.ssw_156()
             if index:
                 return index

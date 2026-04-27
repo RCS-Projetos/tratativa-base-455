@@ -4,16 +4,15 @@ from pandas import DataFrame
 from datetime import datetime
 from ..selenium import Driver
 from .logger import Logger
-import os
 
 class ReportDownloader:
-    def __init__(self, driver: Driver, report:str, date_time: datetime, url: str = 'https://sistema.ssw.inf.br/bin/ssw1440'):
+    def __init__(self, driver: Driver, report:str, user:str, date_time: datetime, url: str = 'https://sistema.ssw.inf.br/bin/ssw1440'):
         self.logger = Logger()
         self.driver = driver
         self.url = url
         self.report = report
         self.date_time = date_time
-        self.user = os.getenv("SSW_USER")
+        self.user = user
     
     def report_table(self, table_html: str) -> pd.DataFrame:
         table = pd.read_html(StringIO(table_html), header=0)[0]
