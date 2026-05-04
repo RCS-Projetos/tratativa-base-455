@@ -2,7 +2,7 @@ import os
 from .logger import Logger
 
 class Files:
-    def __init__(self, download_dir: str = 'Downloads', default_extension: str = '.sswweb'):
+    def __init__(self, download_dir: str = 'Downloads', default_extension: str = '.csv'):
         self.logger = Logger()
         self.download_dir = download_dir
         self.default_extension = default_extension

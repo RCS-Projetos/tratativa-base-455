@@ -55,7 +55,7 @@ class Report(SSW):
         self.logger.info(f"Realizando Download")
         
         time.sleep(5)
-        self.file_path = self.download_156('455', sended_time, '.sswweb')
+        self.file_path = self.download_156('455', sended_time, '.csv')
     
     def process_report(self):
         try:
@@ -69,7 +69,7 @@ class Report(SSW):
             )
             
             old_path = self.file_path
-            new_path = self.file_path.split("/")[-1].replace(".sswweb", ".xlsx")
+            new_path = self.file_path.split("/")[-1].replace(".csv", ".xlsx")
             new_path = f'base_retroativa/{new_path}'
             
             print(old_path)
