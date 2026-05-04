@@ -23,7 +23,7 @@ def executar_automacao(d_inicial: str, d_final: str, documents:str = 'new'):
         logger.info("Execução abortada: Fora do horário permitido (23:00 às 06:00).")
         raise Exception("Execução abortada: Fora do horário permitido (23:00 às 06:00).")
     
-    report = Report(Driver(), documents)
+    report = Report(Driver(headless=False), documents)
     
     args = [
         {'key': 'cod_emp_ctb', 'value': '00'},
@@ -51,18 +51,9 @@ def executar_automacao(d_inicial: str, d_final: str, documents:str = 'new'):
         {'key': 'basico', 'value': 'N'},
     ]
 
-    report.build_args(args, act='E1', dummy='1774980313075')
+    report.build_args(args, act='E1', dummy='1777936882638')
     report.execute_report(url = 'https://sistema.ssw.inf.br/bin/ssw0230')
     report.process_report()
-
-def subtrair_um_mes(dt: datetime) -> datetime:
-    year = dt.year
-    month = dt.month - 1
-    if month == 0:
-        year -= 1
-        month = 12
-    day = min(dt.day, calendar.monthrange(year, month)[1])
-    return dt.replace(year=year, month=month, day=day)
 
 def executar_historico(d_inicial: str, d_final: str):
     hora_atual = datetime.now().hour
@@ -77,13 +68,14 @@ def executar_historico(d_inicial: str, d_final: str):
     if data_final > datetime.now():
         data_final = datetime.now()
         
-    current_end = data_final
+    current_date = data_final
     
-    while current_end > data_inicial:
-        current_start = subtrair_um_mes(current_end)
-        if current_start < data_inicial:
-            current_start = data_inicial
-            
+    # Iteração de trás para frente, sempre pegando o mês fechado
+    while current_date >= data_inicial.replace(day=1):
+        last_day = calendar.monthrange(current_date.year, current_date.month)[1]
+        current_end = current_date.replace(day=last_day)
+        current_start = current_date.replace(day=1)
+        
         try:
             logger.info(f"Executando automação para a data: {current_start.strftime('%d/%m/%Y')} até {current_end.strftime('%d/%m/%Y')}")
             executar_automacao(current_start.strftime("%d%m%y"), current_end.strftime("%d%m%y"), 'all')
@@ -91,7 +83,11 @@ def executar_historico(d_inicial: str, d_final: str):
             logger.error(f"Erro ao executar automação para o período: {current_start.strftime('%d/%m/%Y')} até {current_end.strftime('%d/%m/%Y')}")
             logger.error(str(e))
             
-        current_end = current_start
+        # Volta um mês
+        if current_date.month == 1:
+            current_date = current_date.replace(year=current_date.year - 1, month=12, day=1)
+        else:
+            current_date = current_date.replace(month=current_date.month - 1, day=1)
 
 
 @app.post("/executar/")

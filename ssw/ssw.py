@@ -27,8 +27,8 @@ class SSW:
                 'tax': t.strip()
             })
         
-        self.batch_size = int(os.getenv("BATCH_SIZE"))
-        self.attemps = int(os.getenv("ATTEMPTS"))
+        self.batch_size = int(os.getenv("BATCH_SIZE", "100"))
+        self.attemps = int(os.getenv("ATTEMPTS", "3"))
         self.download_dir = download_dir
         self.driver_instance = driver
     
@@ -67,7 +67,7 @@ class SSW:
                 return index
         return False
 
-    def download_156(self, report: str, sended_time: str, default_extension: str = '.csv'):
+    def download_156(self, report: str, sended_time: str, default_extension: str = '.sswweb'):
         index = self.get_index(report, sended_time)
         if not index:
             return False
