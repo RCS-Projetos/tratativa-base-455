@@ -23,7 +23,7 @@ def executar_automacao(d_inicial: str, d_final: str, documents:str = 'new'):
         logger.info("Execução abortada: Fora do horário permitido (23:00 às 06:00).")
         raise Exception("Execução abortada: Fora do horário permitido (23:00 às 06:00).")
     
-    report = Report(Driver(headless=False), documents)
+    report = Report(Driver(), documents)
     
     args = [
         {'key': 'cod_emp_ctb', 'value': '00'},
