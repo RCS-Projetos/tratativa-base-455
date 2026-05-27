@@ -13,15 +13,19 @@ logger = logging.getLogger("Automação - 455")
 
 app = FastAPI()
 
+def valida_horario():
+    # hora_atual = datetime.now().hour
+    # if hora_atual >= 23 or hora_atual < 6:
+    #     logger.info("Execução abortada: Fora do horário permitido (23:00 às 06:00).")
+    #     raise Exception("Execução abortada: Fora do horário permitido (23:00 às 06:00).")
+    pass
+
 class RoboRequest(BaseModel):
     data_inicial: Optional[str] = None
     data_final: Optional[str] = None
 
 def executar_automacao(d_inicial: str, d_final: str, documents:str = 'new'):
-    hora_atual = datetime.now().hour
-    if hora_atual >= 23 or hora_atual < 6:
-        logger.info("Execução abortada: Fora do horário permitido (23:00 às 06:00).")
-        raise Exception("Execução abortada: Fora do horário permitido (23:00 às 06:00).")
+    
     
     report = Report(Driver(), documents)
     
@@ -56,11 +60,7 @@ def executar_automacao(d_inicial: str, d_final: str, documents:str = 'new'):
     report.process_report()
 
 def executar_historico(d_inicial: str, d_final: str):
-    hora_atual = datetime.now().hour
-    if hora_atual >= 23 or hora_atual < 6:
-        logger.info("Execução abortada: Fora do horário permitido (23:00 às 06:00).")
-        raise Exception("Execução abortada: Fora do horário permitido (23:00 às 06:00).")
-    
+    valida_horario()
     data_inicial = datetime.strptime(d_inicial, "%d%m%y")
     data_final = datetime.strptime(d_final, "%d%m%y")
     
@@ -92,9 +92,8 @@ def executar_historico(d_inicial: str, d_final: str):
 
 @app.post("/executar/")
 def trigger_robo(background_tasks: BackgroundTasks):
-    hora_atual = datetime.now().hour
-    if hora_atual >= 23 or hora_atual < 6:
-        return {"mensagem": "Execução abortada: Fora do horário permitido (23:00 às 06:00)."}
+    valida_horario()
+    
     start_date = (datetime.now() - timedelta(days=30)).strftime("%d%m%y")
     end_date = datetime.now().strftime("%d%m%y")
     background_tasks.add_task(executar_automacao, start_date, end_date)
@@ -102,9 +101,7 @@ def trigger_robo(background_tasks: BackgroundTasks):
 
 @app.post("/historico/")
 def trigger_robo(payload: RoboRequest, background_tasks: BackgroundTasks):
-    hora_atual = datetime.now().hour
-    if hora_atual >= 23 or hora_atual < 6:
-        return {"mensagem": "Execução abortada: Fora do horário permitido (23:00 às 06:00)."}
+    valida_horario()
     
     d_inicial = payload.data_inicial
     d_final = payload.data_final
