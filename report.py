@@ -55,7 +55,7 @@ class Report(SSW):
         self.logger.info(f"Realizando Download")
         
         time.sleep(5)
-        self.file_path = self.download_156('455', sended_time, '.csv')
+        self.file_path = self.download_156('455', sended_time, '.sswweb')
     
     def process_report(self):
         try:
