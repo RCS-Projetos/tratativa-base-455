@@ -7,12 +7,12 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 logger = logging.getLogger("Robo-455")
 
 BASES_PATH = [
-    r"C:\Users\DIVOP\Documents\GitHub\tratativa-base-455\bases\CSVRCS02046003RCS[1]134240.sswweb",
-    r"C:\Users\DIVOP\Documents\GitHub\tratativa-base-455\bases\CSVRCS02046002RCS[1]134158.sswweb",
-    r"C:\Users\DIVOP\Documents\GitHub\tratativa-base-455\bases\CSVRCS02046001RCS[1]134115.sswweb",
-    r"C:\Users\DIVOP\Documents\GitHub\tratativa-base-455\bases\CSVRCS02046000RCS[1]134014.sswweb",
-    r"C:\Users\DIVOP\Documents\GitHub\tratativa-base-455\bases\CSVRCS02045999RCS[1]133831.sswweb",
-    r"C:\Users\DIVOP\Documents\GitHub\tratativa-base-455\bases\CSVRCS02045994RCS[1]133707.sswweb"
+    r"C:\Users\DIVOP\Documents\GitHub\tratativa-base-455\bases\CSVRCS02046003RCS[1]134240.csv",
+    r"C:\Users\DIVOP\Documents\GitHub\tratativa-base-455\bases\CSVRCS02046002RCS[1]134158.csv",
+    r"C:\Users\DIVOP\Documents\GitHub\tratativa-base-455\bases\CSVRCS02046001RCS[1]134115.csv",
+    r"C:\Users\DIVOP\Documents\GitHub\tratativa-base-455\bases\CSVRCS02046000RCS[1]134014.csv",
+    r"C:\Users\DIVOP\Documents\GitHub\tratativa-base-455\bases\CSVRCS02045999RCS[1]133831.csv",
+    r"C:\Users\DIVOP\Documents\GitHub\tratativa-base-455\bases\CSVRCS02045994RCS[1]133707.csv"
 ]
 
 

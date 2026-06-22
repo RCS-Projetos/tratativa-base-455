@@ -14,7 +14,7 @@ SKIP_EXTENSIONS = {
     ".toml", ".env", ".lock", ".css", ".scss", ".html", ".xml",
     ".sql", ".sh", ".bash", ".zsh", ".go", ".rs", ".java", ".c",
     ".cpp", ".h", ".hpp", ".rb", ".php", ".swift", ".kt", ".lua",
-    ".dockerfile", ".makefile", ".sswweb", ".ini", ".cfg",
+    ".dockerfile", ".makefile", ".csv", ".ini", ".cfg",
 }
 
 # Patterns that indicate a line is code
