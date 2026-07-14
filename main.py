@@ -55,7 +55,7 @@ def executar_automacao(d_inicial: str, d_final: str, documents:str = 'new'):
         {'key': 'basico', 'value': 'N'},
     ]
 
-    report.build_args(args, act='E1', dummy='1783369229526')
+    report.build_args(args, act='E1', dummy='1784030504621')
     report.execute_report(url = 'https://sistema.ssw.inf.br/bin/ssw0230')
     report.process_report()
 
